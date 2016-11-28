@@ -1,0 +1,88 @@
+﻿@model StringManipulation.Models.LoanCalculatorModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Loan Calculator</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.LoanAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LoanAmount, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LoanAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InterestRate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.InterestRate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.InterestRate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LoanTerm, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.LoanTerm , "Text")*@
+                @Html.DropDownListFor(x => x.LoanTerm, Model.LoanTerms)
+                @Html.ValidationMessageFor(model => model.LoanTerm, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </div>
+        <h2>Amortized Table</h2>
+        <table class="table table-hover" align="center">
+            <thead>
+            <tr>
+                <th>
+                    Monthly Payment
+                </th>
+                <th>
+                    Principal Amount
+                </th>
+                <th>
+                    Balance Amount
+                </th>
+            </tr>
+                </thead>
+            <tbody>
+
+            @foreach (var item in Model.outputObject)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PrincipalPaid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BalanceAmount)
+                    </td>
+                </tr>
+            }
+                </tbody>
+        </table>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
